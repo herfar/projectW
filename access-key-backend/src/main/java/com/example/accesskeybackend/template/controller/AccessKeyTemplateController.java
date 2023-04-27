@@ -9,6 +9,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -32,5 +35,11 @@ public class AccessKeyTemplateController {
                 .map(Base64Util::toBase64)
                 .map(prefix::concat)
                 .collect(Collectors.joining("\r\n"));
+    }
+    @ResponseStatus
+    @GetMapping("/api/web/checkIpv6Support")
+    public boolean checkIpv6(@RequestParam String siteUrl) throws UnknownHostException {
+        InetAddress address = InetAddress.getByName(siteUrl);
+        return address instanceof Inet6Address;
     }
 }
